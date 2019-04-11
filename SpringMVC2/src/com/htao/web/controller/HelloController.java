@@ -62,8 +62,8 @@ public class HelloController {
 	}
 	@RequestMapping("/role")
 	public 	@ResponseBody Role getRole( @RequestBody Role role){
-//		Role role1 = new Role();
-//		role1 = roleServiceImpl.getById(5l);
+		Role role1 = new Role();
+		role1 = roleServiceImpl.getById(5);
 		System.out.println(role);
 		role.setName("haha");
 		return role;
