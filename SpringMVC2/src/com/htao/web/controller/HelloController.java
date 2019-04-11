@@ -66,6 +66,7 @@ public class HelloController {
 		role1 = roleServiceImpl.getById(5);
 		System.out.println(role);
 		role.setName("haha");
+		System.out.println("hello ");
 		return role;
 		
 	}
