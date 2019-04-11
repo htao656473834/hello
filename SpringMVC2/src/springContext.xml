@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	         xmlns:context="http://www.springframework.org/schema/context"
+	         xmlns:tx="http://www.springframework.org/schema/tx"
+	         xmlns:aop="http://www.springframework.org/schema/aop"
+	         xsi:schemaLocation= "http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            ">
+
+	<!-- 自动扫描与装配bean  -->
+	<context:component-scan base-package="com.htao.web.*"></context:component-scan>
+	
+     <bean  id="dataSource"  class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/exam"/>
+        <property name="user" value="root"/>
+        <property name="password" value="123"/>
+        <property name="initialPoolSize" value="3"></property>
+				<!--连接池中保留的最小连接数。Default: 3 -->
+				<property name="minPoolSize" value="3"></property>
+				<!--连接池中保留的最大连接数。Default: 15 -->
+				<property name="maxPoolSize" value="5"></property>
+				<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+				<property name="acquireIncrement" value="3"></property>
+				<!-- 控制数据源内加载的PreparedStatements数量。如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0 -->
+				<property name="maxStatements" value="8"></property>
+				<!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+				<property name="maxStatementsPerConnection" value="5"></property>
+				<!--最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+				<property name="maxIdleTime" value="1800"></property>
+    </bean>
+    <bean id="logger" class="com.htao.web.logger.Logger"></bean>
+    <!-- 
+    <aop:config>
+     <aop:aspect id="logAdvice"  ref="logger">
+        <aop:before method="before"  pointcut="execution(* com.htao.web.service.impl.*.*(..))"/>
+        <aop:after method="after" pointcut="execution(* com.htao.web.service.impl.*.*(..))"/>
+        <aop:after-returning method="afterReturning" pointcut="execution(* com.htao.web.service.impl.*.*(..))"/>
+        <aop:after-throwing method="afterThrowing" pointcut="execution(* com.htao.web.service.impl.*.*(..))"/>
+    </aop:aspect>
+    </aop:config>
+     -->
+    <!-- 配置声明式事务管理（采用注解的方式） -->
+	   <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--开启事务控制的注解支持，配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>
